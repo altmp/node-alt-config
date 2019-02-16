@@ -1,8 +1,6 @@
 #include <node_api.h>
 #include <assert.h>
 #include "alt-config.h"
-#include <fstream>
-#include <Windows.h>
 
 #define DECLARE_NAPI_METHOD(name, func) \
   { name, 0, func, 0, 0, 0, napi_default, 0 }
@@ -117,7 +115,6 @@ void doneParse(napi_env env, napi_status status, void* param) {
 	}
 	assert(status == napi_ok);
 
-	free(data->result);
 	free(data);
 }
 
