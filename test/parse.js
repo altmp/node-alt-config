@@ -1,10 +1,4 @@
-# node-alt-config
-NodeJS native bindings (NAPI) for alt-config
-
-# Example
-
-```js
-const altConfig = require('alt-config')
+const altConfig = require('../')
 
 altConfig.parse(`a: "b",
 c: {
@@ -22,4 +16,3 @@ c: {
   .catch(err => {
     console.error(err)
   })
-```

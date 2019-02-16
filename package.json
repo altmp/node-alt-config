@@ -1,0 +1,24 @@
+{
+  "name": "alt-config",
+  "version": "1.0.0",
+  "description": "NodeJS native bindings (NAPI) for alt-config",
+  "main": "index.js",
+  "scripts": {
+    "build": "node-gyp build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/altmp/node-alt-config.git"
+  },
+  "author": "alt:MP team <contact@alt-mp.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/altmp/node-alt-config/issues"
+  },
+  "homepage": "https://github.com/altmp/node-alt-config#readme",
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "^1.4.0"
+  }
+}
