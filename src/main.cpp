@@ -90,13 +90,15 @@ void doneParse(napi_env env, napi_status status, void* param) {
 
 	napi_value value;
 
-	try {
-		value = parseNode(env, *data->result);
-	}
-	catch (const config::Error e) {
-		const char* error = e.what();
-		data->error = (char*)malloc(strlen(error) + 1);
-		memcpy(data->error, error, strlen(error) + 1);
+	if (data->error == NULL) {
+		try {
+			value = parseNode(env, *data->result);
+		}
+		catch (const config::Error e) {
+			const char* error = e.what();
+			data->error = (char*)malloc(strlen(error) + 1);
+			memcpy(data->error, error, strlen(error) + 1);
+		}
 	}
 
 	if (data->error == NULL) {
