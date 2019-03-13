@@ -11,32 +11,10 @@ typedef struct {
 
 	char* error;
 	char* string;
-	int* pos;
+	int* line;
+	int* column;
 	alt::config::Node* result;
 } async_parse_data;
-
-typedef struct {
-	int line;
-	int col;
-} line_col_position;
-
-
-line_col_position positionToLineCol(char* data, int position) {
-	int col = 0;
-	int line = 0;
-	if (position > strlen(data)) {
-		position = strlen(data);
-	}
-	for (int actualPos = 0; actualPos < position; actualPos++) {
-		col++;
-		if (data[actualPos] == '\n') {
-			line++;
-			col = 0;
-		}
-	}
-	line_col_position pos = { line, col };
-	return pos;
-}
 
 napi_value parseNode(napi_env env, alt::config::Node node) {
 	napi_value value;
@@ -99,7 +77,8 @@ void doParse(napi_env env, void* param) {
 		const char* error = e.what();
 		data->error = (char*)malloc(strlen(error) + 1);
 		memcpy(data->error, error, strlen(error) + 1);
-		data->pos = new int(e.position());
+		data->line = new int(e.line());
+		data->column = new int(e.column());
 	}
 }
 
@@ -120,7 +99,8 @@ void doneParse(napi_env env, napi_status status, void* param) {
 			const char* error = e.what();
 			data->error = (char*)malloc(strlen(error) + 1);
 			memcpy(data->error, error, strlen(error) + 1);
-			data->pos = new int(e.position());
+			data->line = new int(e.line());
+			data->column = new int(e.column());
 		}
 	}
 
@@ -130,9 +110,7 @@ void doneParse(napi_env env, napi_status status, void* param) {
 	else {
 		napi_value errorMessage;
 
-		line_col_position errorPosition = positionToLineCol(data->string, *data->pos);
-
-		std::string errorMessageString = "Parsing failed on line " + std::to_string(errorPosition.line) + ", column " + std::to_string(errorPosition.col) + "! Reason: " + data->error; // TODO: Rework, it's bad
+		std::string errorMessageString = "Parsing failed on line " + std::to_string(*data->line) + ", column " + std::to_string(*data->column) + "! Reason: " + data->error; // TODO: Rework, it's bad
 
 		status = napi_create_string_utf8(env, errorMessageString.c_str(), errorMessageString.length(), &errorMessage);
 		assert(status == napi_ok);
